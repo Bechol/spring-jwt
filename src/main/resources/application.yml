@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: security-jwt-app
+  mvc:
+    locale: ${APP_LOCALE:en}
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    driver-class-name: ${JDBC_DRIVER_NAME}
+    url: ${DATABASE_URL}
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
+  mail:
+    protocol: ${MAIL_PROTOCOL}
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    contextPath: ${CONTEXT_PATH:/api/v1} #general path part
+
+security:
+  login-path: ${LOGIN_PATH:/login}
+  jwt:
+    header: Authorization
+    prefix: Bearer
+    secret: ${JWT_SECRET}
+    expiration: ${JWT_TOKEN_EXPIRATION} #ms
+
+flyway:
+  user: ${JDBC_DATABASE_USERNAME}
+  password: ${JDBC_DATABASE_PASSWORD}
+
+async-executor:
+  thread-pool:
+    corePoolSize: 2
+    maxPoolSize: 4
+    queueCapacity: 10
+    threadNamePrefix: async-pool-
