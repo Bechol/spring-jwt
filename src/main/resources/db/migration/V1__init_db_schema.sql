@@ -5,6 +5,7 @@ create table users (
     password varchar(255) not null,
     reg_time timestamp not null,
     code varchar(255) null,
+    new_email varchar(255) null,
     is_enabled boolean,
     primary key (id)
 );

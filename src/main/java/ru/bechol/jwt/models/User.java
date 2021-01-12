@@ -46,6 +46,8 @@ public class User implements UserDetails {
 	@Column(name = "reg_time", nullable = false, columnDefinition = "timestamp")
 	LocalDateTime regTime;
 	String code;
+	@Column(name = "new_email")
+	String newEmail;
 	@Column(name = "is_enabled")
 	boolean enabled;
 	@ManyToMany(fetch = FetchType.EAGER)

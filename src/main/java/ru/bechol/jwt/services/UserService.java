@@ -16,4 +16,5 @@ public interface UserService extends UserDetailsService {
 
 	User findByEmail(String email);
 
+	ResponseEntity<?> resetUserPassword(String email);
 }

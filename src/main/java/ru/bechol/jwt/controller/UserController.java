@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.bechol.jwt.request.RegisterRequest;
+import ru.bechol.jwt.request.*;
 import ru.bechol.jwt.services.*;
 
 import javax.validation.Valid;

@@ -18,6 +18,7 @@ import ru.bechol.jwt.request.RegisterRequest;
 import ru.bechol.jwt.response.Response;
 import ru.bechol.jwt.response.dto.UserDto;
 import ru.bechol.jwt.services.*;
+import ru.bechol.jwt.utils.password.PasswordGenerator;
 
 import java.util.*;
 
@@ -40,19 +41,19 @@ public class UserServiceImpl implements UserService {
 	EmailService emailService;
 	PasswordEncoder passwordEncoder;
 	MessageService messageService;
-	String apiContextPath;
+	PasswordGenerator passwordGenerator;
 
 	@Autowired
 	public UserServiceImpl(UserRepository userRepository, @Qualifier("roleServiceImpl") RoleService roleService,
 						   @Qualifier("emailServiceImpl") EmailService emailService, PasswordEncoder passwordEncoder,
 						   MessageService messageService,
-						   @Value("${server.servlet.contextPath}") String apiContextPath) {
+						   @Qualifier("passwordGeneratorImpl") PasswordGenerator passwordGenerator) {
 		this.userRepository = userRepository;
 		this.roleService = roleService;
 		this.emailService = emailService;
 		this.passwordEncoder = passwordEncoder;
 		this.messageService = messageService;
-		this.apiContextPath = apiContextPath;
+		this.passwordGenerator = passwordGenerator;
 	}
 
 	/**
@@ -145,6 +146,26 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User findByEmail(String email) {
 		return userRepository.findByEmail(email).orElse(null);
+	}
+
+	/**
+	 * Method createPasswordRecoveryLink.
+	 * Generate and sen to user email new password.
+	 *
+	 * @param email user email.
+	 * @return ResposeEntity.
+	 */
+	@Override
+	public ResponseEntity<?> resetUserPassword(String email) {
+		String newPassword = passwordGenerator.generate();
+		User user = findByEmail(email);
+		user.setPassword(passwordEncoder.encode(newPassword));
+		userRepository.save(user);
+		emailService.send(user.getEmail(),
+				messageService.getMessage("reset-password-mail-subject"),
+				messageService.getMessage("reset-password-mail-text", newPassword));
+		return ResponseEntity.ok(Response.builder().result(true)
+				.message(messageService.getMessage("send-new-password")).build());
 	}
 
 	/**
