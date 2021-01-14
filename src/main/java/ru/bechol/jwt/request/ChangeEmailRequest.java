@@ -18,7 +18,7 @@ import static ru.bechol.jwt.request.validate.ExistUserValidator.CheckMethod.CHEC
  * @author Father_BO
  * @email oleg071984@gmail.com
  * @see ru.bechol.jwt.controller.ProfileController
- * @see ru.bechol.jwt.services.UserService
+ * @see ru.bechol.jwt.services.ProfileService
  */
 
 @Data
