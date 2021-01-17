@@ -43,3 +43,9 @@ async-executor:
     maxPoolSize: 4
     queueCapacity: 10
     threadNamePrefix: async-pool-
+
+springdoc:
+  api-docs:
+    path: /api-json
+  swagger-ui:
+    path: /api-view

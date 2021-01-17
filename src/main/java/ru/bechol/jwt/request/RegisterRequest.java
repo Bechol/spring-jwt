@@ -31,14 +31,14 @@ public class RegisterRequest extends BaseRequest {
 	String role;
 
 	@Override
-	@NotNull
+	@NotNull(message = NOT_NULL)
 	@CheckUserExistence(message = USER_EXIST, checkMethod = CHECK_NON_EXISTING_USER)
 	public String getEmail() {
 		return super.getEmail();
 	}
 
 	@Override
-	@NotNull
+	@NotNull(message = NOT_NULL)
 	public String getPassword() {
 		return super.getPassword();
 	}

@@ -1,5 +1,6 @@
 package ru.bechol.jwt.request;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Getter;
 
 import javax.validation.constraints.Pattern;
@@ -22,6 +23,7 @@ public abstract class BaseRequest {
 	final static String INCORRECT_EMAIL_MSG = "incorrect email";
 	final static String USER_EXIST = "user with this email is already exist";
 	final static String USER_NOT_REG = "user with this email is not registered";
+	final static String NOT_NULL = "should not be null";
 
 	@Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#!_*-+$%]).{6,16}$",
 			message = INCORRECT_PASSWORD_MSG)

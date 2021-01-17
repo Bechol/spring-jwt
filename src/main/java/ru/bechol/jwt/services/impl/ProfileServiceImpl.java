@@ -2,6 +2,7 @@ package ru.bechol.jwt.services.impl;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,13 +32,15 @@ public class ProfileServiceImpl implements ProfileService {
 	UserRepository userRepository;
 	PasswordEncoder passwordEncoder;
 	EmailService emailService;
+	MessageService messageService;
 
 	@Autowired
 	public ProfileServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder,
-							  @Qualifier("emailServiceImpl") EmailService emailService) {
+							  @Qualifier("emailServiceImpl") EmailService emailService, MessageService messageService) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.emailService = emailService;
+		this.messageService = messageService;
 	}
 
 	/**
@@ -55,7 +58,7 @@ public class ProfileServiceImpl implements ProfileService {
 		user.setNewEmail(changeEmailRequest.getNewEmail());
 		userRepository.save(user);
 		emailService.send(changeEmailRequest.getNewEmail(), "Email change", createLink(confirmationCode));
-		return ResponseEntity.ok(Response.builder().result(true).message("Confirmation link was send to new email").build());
+		return ResponseEntity.ok(Response.builder().result(true).message("confirmation link was send to new email").build());
 	}
 
 	/**
@@ -68,13 +71,17 @@ public class ProfileServiceImpl implements ProfileService {
 	 */
 	@Override
 	public ResponseEntity<?> saveNewEmail(String confirmationCode) throws UserNotFoundException {
+		if (Strings.isEmpty(confirmationCode)) {
+			return ResponseEntity.badRequest().body(Response.builder().result(false)
+					.message(messageService.getMessage("confirmation-code-null")).build());
+		}
 		User user = userRepository.findByCode(confirmationCode)
 				.orElseThrow(() -> new UserNotFoundException("user not found by confirmation code"));
 		user.setEmail(user.getNewEmail());
 		user.setCode(null);
 		user.setNewEmail(null);
 		userRepository.save(user);
-		return ResponseEntity.ok(Response.builder().result(true).message("Your email has been successfully changed.").build());
+		return ResponseEntity.ok(Response.builder().result(true).message("your email has been successfully changed").build());
 	}
 
 	/**
@@ -90,7 +97,7 @@ public class ProfileServiceImpl implements ProfileService {
 		user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
 		userRepository.save(user);
 		emailService.send(user.getEmail(), "Password change", "Your password has been changed.");
-		return ResponseEntity.ok(Response.builder().result(true).message("Your password has been changed.").build());
+		return ResponseEntity.ok(Response.builder().result(true).message("your password has been changed").build());
 	}
 
 	/**
