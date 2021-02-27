@@ -59,6 +59,9 @@ public class User implements UserDetails {
 	@JsonManagedReference
 	@JsonSerialize(using = RoleListSerializer.class)
 	Set<Role> roles;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "profile_id", referencedColumnName = "id")
+	Profile profile;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
