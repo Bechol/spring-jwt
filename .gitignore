@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Docker environment variables file###
+env-config.env

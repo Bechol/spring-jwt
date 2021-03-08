@@ -10,8 +10,14 @@
 * [Spring Data JPA](https://docs.spring.io/spring-boot/docs/2.4.1/reference/htmlsingle/#boot-features-jpa-and-spring-data)
 * [Flyway Migration](https://docs.spring.io/spring-boot/docs/2.4.1/reference/htmlsingle/#howto-execute-flyway-database-migrations-on-startup)
 
-### Warning
+### Docker support
 
-Don't forget to specify environment variables before starting
+For building ONLY application image run in cmd or bash:
+
+    docker build -f ./docker/Dockerfile -t bechol/spring-jwt-demo .
+    
+For building whole project create .env file with environment variables and then run in cmd or bash:
+
+    docker-compose -f ./docker/docker-compose.yml --env-file ./docker/env-config.env up
 
 

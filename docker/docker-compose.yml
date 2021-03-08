@@ -1,0 +1,35 @@
+# create env-config.env file with environment variables in "docker" folder
+# run docker-compose -f ./docker/docker-compose.yml --env-file ./docker/env-config.env up
+version: "3.0"
+services:
+  db:
+    image: postgres:13.2-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - 5432:5432
+    restart: always
+  app:
+    image: bechol/spring-jwt-demo
+    container_name: spring-jwt-demo
+    ports:
+      -  8081:8080
+    environment:
+      CONTEXT_PATH: ${CONTEXT_PATH}
+      JDBC_DRIVER_NAME: ${JDBC_DRIVER_NAME}
+      DATABASE_URL: ${DATABASE_URL}
+      JDBC_DATABASE_USERNAME: ${DB_USERNAME}
+      JDBC_DATABASE_PASSWORD: ${DB_PASSWORD}
+      MAIL_PROTOCOL: ${MAIL_PROTOCOL}
+      MAIL_HOST: ${MAIL_HOST}
+      MAIL_PORT: ${MAIL_PORT}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_TOKEN_EXPIRATION: ${JWT_TOKEN_EXPIRATION}
+    links:
+      - db
+    restart: always
